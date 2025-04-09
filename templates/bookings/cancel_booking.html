@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+
+{% block title %}Cancel Booking - GoCleeny{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="container">
+        <div class="card mx-auto" style="max-width: 600px;">
+            <div class="card-header">
+                <h2 class="card-title">Cancel Booking</h2>
+                <p class="card-description">Are you sure you want to cancel this booking? This action cannot be undone.</p>
+            </div>
+            <div class="card-body">
+                <div class="booking-details">
+                    <p><strong>Booking ID:</strong> {{ booking.id|truncatechars:8 }}</p>
+                    <p><strong>Service:</strong> {{ booking.get_service_name }}</p>
+                    <p><strong>Date:</strong> {{ booking.date }}</p>
+                </div>
+                
+                <form method="post" class="form">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="{{ form.reason.id_for_label }}">Reason for cancellation (optional)</label>
+                        {{ form.reason }}
+                    </div>
+                    
+                    <div class="form-actions">
+                        <a href="{% url 'my_bookings' %}" class="btn btn-outline">Keep Booking</a>
+                        <button type="submit" class="btn btn-danger">Cancel Booking</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+

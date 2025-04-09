@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block title %}My Bookings - GoCleeny{% endblock %}
+
+{% block content %}
+<section class="hero hero-small">
+    <div class="container">
+        <h1 class="hero-title">My Bookings</h1>
+        <p class="hero-subtitle">Manage your cleaning service appointments</p>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+        <div class="tabs">
+            <div class="tabs-header">
+                <button class="tab-button active" data-tab="active">Active Bookings</button>
+                <button class="tab-button" data-tab="history">Booking History</button>
+            </div>
+            
+            <div class="tab-content active" id="active-tab">
+                {% if active_bookings %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Service</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in active_bookings %}
+                            <tr>
+                                <td>{{ booking.id|truncatechars:8 }}</td>
+                                <td>{{ booking.get_service_name }}</td>
+                                <td>{{ booking.date }}</td>
+                                <td><span class="badge badge-success">Active</span></td>
+                                <td>
+                                    <a href="{% url 'cancel_booking' booking.id %}" class="btn btn-danger btn-sm">Cancel</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">📅</div>
+                    <h3 class="empty-title">No Active Bookings</h3>
+                    <p class="empty-description">
+                        You don't have any active bookings at the moment. Would you like to schedule a cleaning service?
+                    </p>
+                    <a href="{% url 'booking' %}" class="btn btn-primary">Book a Cleaning</a>
+                </div>
+                {% endif %}
+            </div>
+            
+            <div class="tab-content" id="history-tab">
+                {% if history_bookings %}
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Booking ID</th>
+                                <th>Service</th>
+                                <th>Date</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for booking in history_bookings %}
+                            <tr>
+                                <td>{{ booking.id|truncatechars:8 }}</td>
+                                <td>{{ booking.get_service_name }}</td>
+                                <td>{{ booking.date }}</td>
+                                <td>
+                                    {% if booking.status == 'completed' %}
+                                    <span class="badge badge-primary">Completed</span>
+                                    {% elif booking.status == 'canceled' %}
+                                    <span class="badge badge-danger">Canceled</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="empty-state">
+                    <div class="empty-icon">🕒</div>
+                    <h3 class="empty-title">No Booking History</h3>
+                    <p class="empty-description">
+                        Your booking history will appear here once you have completed or canceled bookings.
+                    </p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+        
+        tabButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const tabName = this.getAttribute('data-tab');
+                
+                // Update active tab button
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                
+                // Show the selected tab content
+                tabContents.forEach(content => content.classList.remove('active'));
+                document.getElementById(`${tabName}-tab`).classList.add('active');
+            });
+        });
+    });
+</script>
+{% endblock %}
+

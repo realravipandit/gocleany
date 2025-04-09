@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}GoCleeny - Eco-Friendly Cleaning Services{% endblock %}</title>
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/styles.css">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <header class="navbar">
+        <div class="container">
+            <a href="{% url 'home' %}" class="logo">
+                <span class="logo-icon">🍃</span>
+                <span class="logo-text">GoCleeny</span>
+            </a>
+            
+            <nav class="nav-desktop">
+                <a href="{% url 'home' %}" class="nav-link">Home</a>
+                <a href="{% url 'about' %}" class="nav-link">About Us</a>
+                <a href="{% url 'services' %}" class="nav-link">Services</a>
+                <a href="{% url 'booking' %}" class="nav-link">Booking</a>
+                {% if user.is_authenticated %}
+                <a href="{% url 'my_bookings' %}" class="nav-link">My Bookings</a>
+                {% endif %}
+                <a href="{% url 'careers' %}" class="nav-link">Careers</a>
+                <a href="{% url 'franchising' %}" class="nav-link">Franchising</a>
+                <a href="{% url 'contact' %}" class="nav-link">Contact</a>
+            </nav>
+            
+            <div class="auth-buttons">
+                {% if user.is_authenticated %}
+                <a href="{% url 'my_bookings' %}" class="btn btn-outline">
+                    <span class="icon">📅</span>
+                    My Bookings
+                </a>
+                <a href="{% url 'logout' %}" class="btn">Logout</a>
+                {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline">Login</a>
+                <a href="{% url 'signup' %}" class="btn">Sign Up</a>
+                {% endif %}
+                <a href="{% url 'booking' %}" class="btn btn-primary">Book a Cleaning</a>
+            </div>
+            
+            <button class="menu-toggle" id="menuToggle">
+                <span class="icon">☰</span>
+            </button>
+        </div>
+        
+        <div class="mobile-menu" id="mobileMenu">
+            <div class="container">
+                <div class="mobile-menu-header">
+                    <a href="{% url 'home' %}" class="logo">
+                        <span class="logo-icon">🍃</span>
+                        <span class="logo-text">GoCleeny</span>
+                    </a>
+                    <button class="menu-close" id="menuClose">
+                        <span class="icon">✕</span>
+                    </button>
+                </div>
+                <nav class="mobile-nav">
+                    <a href="{% url 'home' %}" class="mobile-nav-link">Home</a>
+                    <a href="{% url 'about' %}" class="mobile-nav-link">About Us</a>
+                    <a href="{% url 'services' %}" class="mobile-nav-link">Services</a>
+                    <a href="{% url 'booking' %}" class="mobile-nav-link">Booking</a>
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'my_bookings' %}" class="mobile-nav-link">My Bookings</a>
+                    <a href="{% url 'logout' %}" class="mobile-nav-link">Logout</a>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="mobile-nav-link">Login</a>
+                    <a href="{% url 'signup' %}" class="mobile-nav-link">Sign Up</a>
+                    {% endif %}
+                    <a href="{% url 'careers' %}" class="mobile-nav-link">Careers</a>
+                    <a href="{% url 'franchising' %}" class="mobile-nav-link">Franchising</a>
+                    <a href="{% url 'contact' %}" class="mobile-nav-link">Contact</a>
+                    <a href="{% url 'booking' %}" class="btn btn-primary mobile-cta">Book a Cleaning</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="message message-{{ message.tags }}">
+                {{ message }}
+                <button class="message-close">✕</button>
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        {% block content %}{% endblock %}
+    </main>
+    
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-column">
+                    <a href="{% url 'home' %}" class="footer-logo">
+                        <span class="logo-icon">🍃</span>
+                        <span class="logo-text">GoCleeny</span>
+                    </a>
+                    <p class="footer-description">
+                        Eco-friendly cleaning services for homes and businesses. We care for your space and the planet.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="social-link">
+                            <span class="icon">📱</span>
+                            <span class="sr-only">Facebook</span>
+                        </a>
+                        <a href="#" class="social-link">
+                            <span class="icon">📷</span>
+                            <span class="sr-only">Instagram</span>
+                        </a>
+                        <a href="#" class="social-link">
+                            <span class="icon">🐦</span>
+                            <span class="sr-only">Twitter</span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-heading">Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'home' %}">Home</a></li>
+                        <li><a href="{% url 'about' %}">About Us</a></li>
+                        <li><a href="{% url 'services' %}">Services</a></li>
+                        <li><a href="{% url 'booking' %}">Book a Cleaning</a></li>
+                        <li><a href="{% url 'contact' %}">Contact Us</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-heading">Our Services</h3>
+                    <ul class="footer-links">
+                        <li><a href="{% url 'services' %}#home">Home Cleaning</a></li>
+                        <li><a href="{% url 'services' %}#office">Office Cleaning</a></li>
+                        <li><a href="{% url 'services' %}#tenancy">End of Tenancy Cleaning</a></li>
+                        <li><a href="{% url 'services' %}#airbnb">Airbnb & Holiday Let Cleaning</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3 class="footer-heading">Contact Us</h3>
+                    <ul class="contact-info">
+                        <li class="contact-item">
+                            <span class="icon">✉️</span>
+                            <span>gocleeny@gmail.com</span>
+                        </li>
+                        <li class="contact-item">
+                            <span class="icon">📞</span>
+                            <span>+44 123 456 7890</span>
+                        </li>
+                        <li class="contact-item">
+                            <span class="icon">📍</span>
+                            <span>London, United Kingdom</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p class="copyright">&copy; {% now "Y" %} GoCleeny. All rights reserved.</p>
+                <div class="footer-legal">
+                    <a href="/privacy">Privacy Policy</a>
+                    <a href="/terms">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // Mobile menu toggle
+        document.addEventListener('DOMContentLoaded', function() {
+            const menuToggle = document.getElementById('menuToggle');
+            const menuClose = document.getElementById('menuClose');
+            const mobileMenu = document.getElementById('mobileMenu');
+            
+            if (menuToggle && menuClose && mobileMenu) {
+                menuToggle.addEventListener('click', function() {
+                    mobileMenu.classList.add('active');
+                    document.body.style.overflow = 'hidden';
+                });
+                
+                menuClose.addEventListener('click', function() {
+                    mobileMenu.classList.remove('active');
+                    document.body.style.overflow = '';
+                });
+            }
+            
+            // Message close buttons
+            const messageCloseButtons = document.querySelectorAll('.message-close');
+            messageCloseButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    this.parentElement.remove();
+                });
+            });
+        });
+    </script>
+    
+    {% block extra_js %}{% endblock %}
+</body>
+</html>
+
